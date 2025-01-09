@@ -1,5 +1,8 @@
 #pragma once
 
+#include "walkeralias.hpp"
+#include <algorithm>
+#include <cassert>
 #include <cstdio>
 #include <cstdlib>
 #include <random>
@@ -9,11 +12,15 @@ class Node {
 public:
   int id;
   const int fitness;
-  Node(int _id, int _fitness)
-      : id(_id), fitness(_fitness) {
+  Node(int _fitness)
+      : id(0), fitness(_fitness) {
   }
   void add(Node *n) {
     links.push_back(n);
+  }
+
+  int degree() {
+    return static_cast<int>(links.size());
   }
 
   void show() {
@@ -41,25 +48,53 @@ struct Edge {
 
 class Network {
 public:
-  Network() {
-    last_id = 0;
-  }
-  void add(std::mt19937 &mt) {
+  // 初期ネットワーク追加用
+  void add(std::mt19937 &rng) {
     std::uniform_int_distribution<> ud(1, 100);
-    int fitness = ud(mt);
-    nodes.push_back(Node(last_id, fitness));
-    last_id++;
+    int fitness = ud(rng);
+    nodes.push_back(new Node(fitness));
+  }
+
+  // Bianconi-Barabasiで追加
+  void add_BB(const int m, std::mt19937 &rng) {
+    // あらかじめ重みを作成しておく
+    std::vector<int> weights;
+    for (auto &n : nodes) {
+      int links = n->degree();
+      int fitness = n->fitness;
+      weights.push_back(links * fitness);
+    }
+    WalkerAlias<int> alias_method(weights);
+    std::vector<int> indices = alias_method.select(m, rng);
+
+    //新しいノードを追加
+    const int j = size();
+    add(rng);
+    for (auto i : indices) {
+      connect(i, j);
+    }
+  }
+
+  // 番号を振り直す
+  void assign_id() {
+    int id = 0;
+    for (auto &n : nodes) {
+      n->id = id;
+      id++;
+    }
   }
 
   void show_nodes() {
+    assign_id();
     printf("-------------------------------\n");
     printf("Nodes:\n");
     for (auto n : nodes) {
-      n.show();
+      n->show();
     }
   }
 
   void show_edges() {
+    assign_id();
     printf("-------------------------------\n");
     printf("Edges:\n");
     for (auto e : edges) {
@@ -68,14 +103,35 @@ public:
   }
 
   void connect(int i, int j) {
-    Node *ni = &(nodes[i]);
-    Node *nj = &(nodes[j]);
+    assert(i < static_cast<int>(nodes.size()));
+    assert(j < static_cast<int>(nodes.size()));
+    Node *ni = nodes[i];
+    Node *nj = nodes[j];
     ni->add(nj);
     nj->add(ni);
     edges.push_back(Edge(ni, nj));
+    //printf("connect %d-%d\n", i, j);
   }
 
-  std::vector<Node> nodes;
+  //次数分布関数を返す
+  std::vector<int> degree_distribution() {
+    std::vector<int> degrees;
+    for (auto n : nodes) {
+      degrees.push_back(n->degree());
+    }
+    auto max = *std::max_element(degrees.begin(), degrees.end());
+    std::vector<int> dd(max + 1, 0);
+    for (auto d : degrees) {
+      dd[d]++;
+    }
+    return dd;
+  }
+
+  int size() {
+    return static_cast<int>(nodes.size());
+  }
+
+  std::vector<Node *> nodes;
 
 private:
   int last_id;
