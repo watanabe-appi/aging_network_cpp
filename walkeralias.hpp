@@ -65,18 +65,16 @@ public:
     }
   }
 
-  int select() const {
+  int select(std::mt19937 &rng) const {
     // ランダムデバイス
-    static thread_local std::random_device rd;
-    static thread_local std::mt19937 gen(rd());
 
     // インデックスをランダムに選択
     std::uniform_int_distribution<size_t> dist_index(0, probability.size() - 1);
-    size_t index = dist_index(gen);
+    size_t index = dist_index(rng);
 
     // 確率的にAliasを使用
     std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
-    if (dist_prob(gen) < probability[index]) {
+    if (dist_prob(rng) < probability[index]) {
       return static_cast<int>(index);
     } else {
       return static_cast<int>(alias[index]);
