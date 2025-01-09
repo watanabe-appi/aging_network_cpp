@@ -1,5 +1,6 @@
 #pragma once
 
+#include "utils.hpp"
 #include "walkeralias.hpp"
 #include <algorithm>
 #include <cassert>
@@ -119,12 +120,7 @@ public:
     for (auto n : nodes) {
       degrees.push_back(n->degree());
     }
-    auto max = *std::max_element(degrees.begin(), degrees.end());
-    std::vector<int> dd(max + 1, 0);
-    for (auto d : degrees) {
-      dd[d]++;
-    }
-    return dd;
+    return calculate_frequency_distribution(degrees);
   }
 
   int size() {
