@@ -2,3 +2,4 @@ Makefile.dep
 *.o
 a.out
 *.dat
+.vscode

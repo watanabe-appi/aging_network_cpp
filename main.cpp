@@ -44,23 +44,31 @@ void test_alias(std::mt19937 &rng) {
   }
 }
 
-void show_all(std::vector<int> &v) {
+template <class T>
+void show_all(std::vector<T> &v) {
   for (size_t i = 0; i < v.size(); ++i) {
-    printf("%lu %d\n", i, v[i]);
+    std::cout << i << " " << v[i] << std::endl;
   }
+}
+
+std::vector<int> calc(int m, int N, std::mt19937 &rng) {
+  Network network;
+  make_initial_network(m, rng, network);
+  while (network.size() < N) {
+    network.add_BB(m, rng);
+  }
+  return network.degree_distribution();
 }
 
 int main() {
   int seed = 0;
   const int m = 4;
-  std::mt19937 rng(seed);
-  Network network;
-  make_initial_network(m, rng, network);
   const int N = 10000;
-  while (network.size() < N) {
-    network.add_BB(m, rng);
+  std::mt19937 rng(seed);
+  std::vector<std::vector<int>> data;
+  for (int i = 0; i < 100; i++) {
+    data.push_back(calc(m, N, rng));
   }
-  auto v = network.degree_distribution();
-  //network.show_nodes();
-  show_all(v);
+  auto ave = average_frequency_distribution(data);
+  show_all(ave);
 }
