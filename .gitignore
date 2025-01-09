@@ -1,2 +1,3 @@
 Makefile.dep
 *.o
+a.out

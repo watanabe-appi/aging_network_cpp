@@ -2,20 +2,22 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <random>
 #include <vector>
 
 class Node {
 public:
   int id;
-  Node(int _id)
-      : id(_id) {
+  const int fitness;
+  Node(int _id, int _fitness)
+      : id(_id), fitness(_fitness) {
   }
   void add(Node *n) {
     links.push_back(n);
   }
 
   void show() {
-    printf("Node: %d\n", id);
+    printf("Node: (%d) fitness = %d\n", id, fitness);
     for (auto n : links) {
       printf("%d,", n->id);
     }
@@ -42,8 +44,10 @@ public:
   Network() {
     last_id = 0;
   }
-  void add() {
-    nodes.push_back(Node(last_id));
+  void add(std::mt19937 &mt) {
+    std::uniform_int_distribution<> ud(1, 100);
+    int fitness = ud(mt);
+    nodes.push_back(Node(last_id, fitness));
     last_id++;
   }
 
