@@ -38,6 +38,7 @@ void save_vector(std::string filename, std::vector<T> &v) {
   for (auto i : v) {
     ofs << i << std::endl;
   }
+  printf("%s\n", filename);
 }
 
 int find_max(std::vector<std::vector<int>> &v) {

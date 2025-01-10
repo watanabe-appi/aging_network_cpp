@@ -139,17 +139,16 @@ void test_aging(std::mt19937 &rng) {
     degree_variance.push_back(network.calculate_degree_variance());
   }
   auto v = network.degree_distribution();
-  // network.show_nodes();
-  save_vector("degree.dat", degree_average);
-  save_vector("variance.dat", degree_variance);
+  std::string base = param2name(alpha, beta);
+  std::string degree_average_file = "degree_average_" + base + ".dat";
+  std::string degree_variance_file = "degree_variance_" + base + ".dat";
+  save_vector(degree_average_file, degree_average);
+  save_vector(degree_variance_file, degree_variance);
   show_all(v);
 }
 
 int main() {
   int seed = 1;
   std::mt19937 rng(seed);
-  std::cout << param2name(1.0, 1.0) << std::endl;
-  std::cout << param2name(-1.0, 1.0) << std::endl;
-  std::cout << param2name(1.0, -1.0) << std::endl;
-  std::cout << param2name(-1.0, -1.0) << std::endl;
+  test_aging(rng);
 }
