@@ -15,6 +15,8 @@ void debug_printf(const char *, Args const &...) {
 }
 #endif
 
+namespace util {
+
 std::string param2name(double alpha, double beta) {
   auto format = [](double value) -> std::string {
     int intValue = static_cast<int>(value * 10);
@@ -33,12 +35,12 @@ std::string param2name(double alpha, double beta) {
 }
 
 template <class T>
-void save_vector(std::string filename, std::vector<T> &v) {
+void save_vector(std::string filename, const std::vector<T> &v) {
   std::ofstream ofs(filename);
   for (auto i : v) {
     ofs << i << std::endl;
   }
-  printf("%s\n", filename);
+  printf("%s\n", filename.c_str());
 }
 
 int find_max(std::vector<std::vector<int>> &v) {
@@ -77,3 +79,5 @@ std::vector<int> calculate_frequency_distribution(std::vector<int> &v) {
   }
   return dd;
 }
+
+} // namespace util

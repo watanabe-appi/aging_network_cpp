@@ -195,7 +195,7 @@ public:
     for (auto n : nodes) {
       degrees.push_back(n->degree());
     }
-    return calculate_frequency_distribution(degrees);
+    return util::calculate_frequency_distribution(degrees);
   }
 
   int size() {

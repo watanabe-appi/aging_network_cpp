@@ -83,7 +83,7 @@ void test_BB(std::mt19937 &rng) {
   for (int i = 0; i < 10; i++) {
     data.push_back(calc(m, N, rng));
   }
-  auto ave = average_frequency_distribution(data);
+  auto ave = util::average_frequency_distribution(data);
   show_all(ave);
 }
 
@@ -138,13 +138,13 @@ void test_aging(std::mt19937 &rng) {
     degree_average.push_back(network.calculate_degree_average());
     degree_variance.push_back(network.calculate_degree_variance());
   }
-  auto v = network.degree_distribution();
-  std::string base = param2name(alpha, beta);
+  std::string base = util::param2name(alpha, beta);
+  std::string degree_distribution_file = "degree_distribution_" + base + ".dat";
   std::string degree_average_file = "degree_average_" + base + ".dat";
   std::string degree_variance_file = "degree_variance_" + base + ".dat";
-  save_vector(degree_average_file, degree_average);
-  save_vector(degree_variance_file, degree_variance);
-  show_all(v);
+  util::save_vector(degree_average_file, degree_average);
+  util::save_vector(degree_variance_file, degree_variance);
+  util::save_vector(degree_distribution_file, network.degree_distribution());
 }
 
 int main() {
