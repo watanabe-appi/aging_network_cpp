@@ -25,6 +25,14 @@ public:
     links.push_back(n);
   }
 
+  void remove(Node *n) {
+    auto it = std::remove(links.begin(), links.end(), n);
+    if (it != links.end()) {
+      printf("Node %d removes %d\n", id, n->id);
+      links.erase(it, links.end());
+    }
+  }
+
   int degree() {
     return static_cast<int>(links.size());
   }
@@ -112,7 +120,6 @@ public:
     }
   }
 
-  // ノードの接続
   void connect(int i, int j) {
     assert(i < static_cast<int>(nodes.size()));
     assert(j < static_cast<int>(nodes.size()));
@@ -124,13 +131,23 @@ public:
     // printf("connect %d-%d\n", i, j);
   }
 
+  void remove_at(int index) {
+    Node *node_to_be_removed = nodes[index];
+    nodes.erase(nodes.begin() + index);
+    for (auto n : nodes) {
+      n->remove(node_to_be_removed);
+    }
+
+    delete node_to_be_removed;
+  }
+
   void remove_isolated_nodes() {
     nodes.erase(
         std::remove_if(nodes.begin(), nodes.end(),
                        [](Node *node) {
                          bool is_isolated = node->is_isolated();
                          if (is_isolated) {
-                           delete node; // メモリ解放
+                           delete node;
                          }
                          return is_isolated;
                        }),

@@ -1,5 +1,3 @@
 # Aging simulation of Network
 
-C++でネットワーク構造を扱う際、一つもエッジを持たない孤立したノードを削除するメソッド名をスネークケースで提案してください。
-
-std::vector<Node *> nodesというベクターから、nodes.degree()==0であるような要素をすべて削除するコードを書いてください。
+std::vector<Node *> linksにおいて、指定された要素Node *nを含むか確認し、もしあった場合は削除して間を詰めるコード。
