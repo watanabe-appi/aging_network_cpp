@@ -78,13 +78,13 @@ void test_remove(std::mt19937 &rng) {
   network.add(rng);
   network.add(rng);
   network.add(rng);
-  network.connect(0, 1);
-  network.connect(1, 2);
+  network.connect(1, 0);
+  network.connect(2, 1);
   network.connect(3, 1);
-  network.show_nodes();
+  network.assign_id();
   network.remove_at(1);
   network.show_nodes();
-  network.remove_isolated_nodes();
+  network.show_edges();
 }
 
 int main() {

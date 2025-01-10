@@ -48,8 +48,6 @@ public:
     }
     printf("\n");
   }
-
-private:
   std::vector<Node *> links;
 };
 
@@ -66,16 +64,14 @@ struct Edge {
 
 class Network {
 public:
-  // 初期ネットワーク追加用
   void add(std::mt19937 &rng) {
     std::uniform_int_distribution<> ud(1, 100);
     int fitness = ud(rng);
     nodes.push_back(new Node(fitness));
   }
 
-  // Bianconi-Barabasiで追加
+  // adds a node with the Bianconi-Barabasi criterion
   void add_BB(const int m, std::mt19937 &rng) {
-    // あらかじめ重みを作成しておく
     std::vector<int> weights;
     for (auto &n : nodes) {
       int links = n->degree();
@@ -85,38 +81,10 @@ public:
     WalkerAlias<int> alias_method(weights);
     std::vector<int> indices = alias_method.select(m, rng);
 
-    // 新しいノードを追加
     const int j = size();
     add(rng);
     for (auto i : indices) {
       connect(i, j);
-    }
-  }
-
-  // 番号を振り直す
-  void assign_id() {
-    int id = 0;
-    for (auto &n : nodes) {
-      n->id = id;
-      id++;
-    }
-  }
-
-  void show_nodes() {
-    assign_id();
-    printf("-------------------------------\n");
-    printf("Nodes:\n");
-    for (auto n : nodes) {
-      n->show();
-    }
-  }
-
-  void show_edges() {
-    assign_id();
-    printf("-------------------------------\n");
-    printf("Edges:\n");
-    for (auto e : edges) {
-      e.show();
     }
   }
 
@@ -127,8 +95,18 @@ public:
     Node *nj = nodes[j];
     ni->add(nj);
     nj->add(ni);
-    edges.push_back(Edge(ni, nj));
-    // printf("connect %d-%d\n", i, j);
+  }
+
+  void generate_edge_list() {
+    edges.clear();
+    assign_id();
+    for (auto ni : nodes) {
+      for (auto nj : ni->links) {
+        if (ni->id < nj->id) {
+          edges.push_back(Edge(ni, nj));
+        }
+      }
+    }
   }
 
   void remove_at(int index) {
@@ -154,7 +132,6 @@ public:
         nodes.end());
   }
 
-  // 次数分布関数を返す
   std::vector<int> degree_distribution() {
     std::vector<int> degrees;
     for (auto n : nodes) {
@@ -168,6 +145,34 @@ public:
   }
 
   std::vector<Node *> nodes;
+
+  // For Debug
+
+  void assign_id() {
+    int id = 0;
+    for (auto &n : nodes) {
+      n->id = id;
+      id++;
+    }
+  }
+
+  void show_nodes() {
+    assign_id();
+    printf("-------------------------------\n");
+    printf("Nodes:\n");
+    for (auto n : nodes) {
+      n->show();
+    }
+  }
+
+  void show_edges() {
+    generate_edge_list();
+    printf("-------------------------------\n");
+    printf("Edges:\n");
+    for (auto e : edges) {
+      e.show();
+    }
+  }
 
 private:
   std::vector<Edge> edges;
