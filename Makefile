@@ -5,7 +5,7 @@ OBJ=$(SRC:.cpp=.o)
 
 CC=g++
 CPPFLAGS=-O3 -march=native -Wall -Wextra -std=c++11 
-CPPFLAGS+= -g
+#CPPFLAGS+= -g
 
 -include Makefile.opt
 

@@ -1,4 +1,5 @@
 #include "network.hpp"
+#include "simulation.hpp"
 #include "walkeralias.hpp"
 #include <cstdio>
 #include <iostream>
@@ -6,17 +7,6 @@
 #include <numeric>
 #include <random>
 #include <unordered_set>
-
-void make_initial_network(int m, std::mt19937 &rng, Network &network) {
-  for (int i = 0; i < m; i++) {
-    network.add(rng);
-  }
-  for (int i = 0; i < m - 1; i++) {
-    for (int j = i + 1; j < m; j++) {
-      network.connect(i, j);
-    }
-  }
-}
 
 void test_alias_sample(std::mt19937 &rng) {
   std::vector<double> weights = {1.0, 3.0, 2.5, 3.5};
@@ -150,5 +140,8 @@ void test_aging(std::mt19937 &rng) {
 int main() {
   int seed = 1;
   std::mt19937 rng(seed);
-  test_aging(rng);
+  simulate(-1.5, 2.0, rng);
+  simulate(3.0, 2.5, rng);
+  simulate(-1.5, -1.5, rng);
+  simulate(2.0, -1.0, rng);
 }

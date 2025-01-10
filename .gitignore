@@ -3,3 +3,4 @@ Makefile.dep
 a.out
 *.dat
 .vscode
+plot
