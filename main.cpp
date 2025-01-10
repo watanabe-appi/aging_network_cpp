@@ -66,7 +66,7 @@ int main() {
   const int N = 10000;
   std::mt19937 rng(seed);
   std::vector<std::vector<int>> data;
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < 10; i++) {
     data.push_back(calc(m, N, rng));
   }
   auto ave = average_frequency_distribution(data);

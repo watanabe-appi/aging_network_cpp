@@ -68,7 +68,7 @@ public:
     WalkerAlias<int> alias_method(weights);
     std::vector<int> indices = alias_method.select(m, rng);
 
-    //新しいノードを追加
+    // 新しいノードを追加
     const int j = size();
     add(rng);
     for (auto i : indices) {
@@ -111,10 +111,10 @@ public:
     ni->add(nj);
     nj->add(ni);
     edges.push_back(Edge(ni, nj));
-    //printf("connect %d-%d\n", i, j);
+    // printf("connect %d-%d\n", i, j);
   }
 
-  //次数分布関数を返す
+  // 次数分布関数を返す
   std::vector<int> degree_distribution() {
     std::vector<int> degrees;
     for (auto n : nodes) {
@@ -130,6 +130,5 @@ public:
   std::vector<Node *> nodes;
 
 private:
-  int last_id;
   std::vector<Edge> edges;
 };
