@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <vector>
 
@@ -16,6 +17,43 @@ void debug_printf(const char *, Args const &...) {
 #endif
 
 namespace util {
+
+template <class T>
+int find_max_index(std::vector<T> &v) {
+  auto max_it = std::max_element(v.begin(), v.end());
+  return std::distance(v.begin(), max_it);
+}
+
+int find(int index, std::vector<int> &cluster) {
+  while (index != cluster[index]) {
+    index = cluster[index];
+  }
+  return index;
+}
+
+void unite(int i, int j, std::vector<int> &cluster) {
+  i = find(i, cluster);
+  j = find(j, cluster);
+  if (i < j) {
+    cluster[j] = i;
+  } else {
+    cluster[i] = j;
+  }
+}
+
+void find_all(std::vector<int> &cluster) {
+  for (size_t i = 0; i < cluster.size(); ++i) {
+    int index = find(i, cluster);
+    cluster[i] = index;
+  }
+}
+
+template <class T>
+void show_all(std::vector<T> &v) {
+  for (size_t i = 0; i < v.size(); ++i) {
+    std::cout << i << " " << v[i] << std::endl;
+  }
+}
 
 std::string param2name(double alpha, double beta) {
   auto format = [](double value) -> std::string {

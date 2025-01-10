@@ -1,6 +1,7 @@
 #include "network.hpp"
 #include "simulation.hpp"
 #include "walkeralias.hpp"
+#include <algorithm>
 #include <cstdio>
 #include <iostream>
 #include <map>
@@ -49,13 +50,6 @@ void test_alias_sample_unique(std::mt19937 &rng) {
   }
 }
 
-template <class T>
-void show_all(std::vector<T> &v) {
-  for (size_t i = 0; i < v.size(); ++i) {
-    std::cout << i << " " << v[i] << std::endl;
-  }
-}
-
 std::vector<int> calc(int m, int N, std::mt19937 &rng) {
   Network network;
   make_initial_network(m, rng, network);
@@ -74,7 +68,7 @@ void test_BB(std::mt19937 &rng) {
     data.push_back(calc(m, N, rng));
   }
   auto ave = util::average_frequency_distribution(data);
-  show_all(ave);
+  util::show_all(ave);
 }
 
 void test_remove(std::mt19937 &rng) {
@@ -137,11 +131,31 @@ void test_aging(std::mt19937 &rng) {
   util::save_vector(degree_distribution_file, network.degree_distribution());
 }
 
-int main() {
-  int seed = 1;
-  std::mt19937 rng(seed);
+void generate_variance(std::mt19937 &rng) {
   simulate(-1.5, 2.0, rng);
   simulate(3.0, 2.5, rng);
   simulate(-1.5, -1.5, rng);
   simulate(2.0, -1.0, rng);
+}
+
+void test_percolation(std::mt19937 &rng) {
+  Network network;
+  network.add(rng);
+  network.add(rng);
+  network.add(rng);
+  network.add(rng);
+  network.add(rng);
+  network.connect(0, 2);
+  network.connect(1, 3);
+  network.connect(3, 4);
+  network.show_edges();
+  network.show_nodes();
+  network.filter_largest_cluster();
+  network.show_nodes();
+}
+
+int main() {
+  int seed = 1;
+  std::mt19937 rng(seed);
+  test_percolation(rng);
 }

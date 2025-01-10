@@ -13,9 +13,11 @@
 class Node {
 public:
   int id;
+  bool remove_flag;
   int fitness;
   Node(int _fitness)
       : id(0), fitness(_fitness) {
+    remove_flag = false;
   }
 
   ~Node() {
@@ -122,8 +124,8 @@ public:
     nj->add(ni);
   }
 
-  void generate_edge_list() {
-    edges.clear();
+  std::vector<Edge> generate_edge_list() {
+    std::vector<Edge> edges;
     assign_id();
     for (auto ni : nodes) {
       for (auto nj : ni->links) {
@@ -132,6 +134,7 @@ public:
         }
       }
     }
+    return edges;
   }
 
   void remove_aging(double alpha, std::mt19937 &rng) {
@@ -170,6 +173,34 @@ public:
         nodes.end());
   }
 
+  // エッジで接続されているノードのうち、最大のクラスターのみ残す
+  void filter_largest_cluster() {
+    std::vector<int> cluster;
+    for (int i = 0; i < size(); ++i) {
+      cluster.push_back(i);
+    }
+    auto edges = generate_edge_list();
+    assign_id();
+    for (auto e : edges) {
+      int i = e.left->id;
+      int j = e.right->id;
+      util::unite(i, j, cluster);
+    }
+    util::find_all(cluster);
+    // Find the cluster index of the maximum cluster
+    std::vector<int> cluster_size(cluster.size());
+    for (auto i : cluster) {
+      cluster_size[i]++;
+    }
+    int index_of_max_cluster = util::find_max_index(cluster_size);
+    for (auto n : nodes) {
+      if (cluster[n->id] != index_of_max_cluster) {
+        n->remove_flag = true;
+      }
+    }
+    nodes.erase(std::remove_if(nodes.begin(), nodes.end(), [](Node *n) { return n->remove_flag; }), nodes.end());
+  }
+  // for observation
   double calculate_degree_average() {
     double average = 0;
     for (auto n : nodes) {
@@ -202,8 +233,6 @@ public:
     return static_cast<int>(nodes.size());
   }
 
-  std::vector<Node *> nodes;
-
   // For Debug
 
   void assign_id() {
@@ -224,7 +253,7 @@ public:
   }
 
   void show_edges() {
-    generate_edge_list();
+    auto edges = generate_edge_list();
     printf("-------------------------------\n");
     printf("Edges:\n");
     for (auto e : edges) {
@@ -232,6 +261,7 @@ public:
     }
   }
 
+  std::vector<Node *> nodes;
+
 private:
-  std::vector<Edge> edges;
 };
