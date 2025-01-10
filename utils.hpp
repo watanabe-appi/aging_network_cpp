@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <fstream>
+#include <sstream>
 #include <vector>
 
 template <typename... Args>
@@ -13,6 +14,23 @@ void debug_printf(const char *format, Args const &...args) {
 void debug_printf(const char *, Args const &...) {
 }
 #endif
+
+std::string param2name(double alpha, double beta) {
+  auto format = [](double value) -> std::string {
+    int intValue = static_cast<int>(value * 10);
+    std::ostringstream oss;
+    if (intValue >= 0) {
+      oss << std::setw(2) << std::setfill('0') << intValue;
+    } else {
+      oss << intValue;
+    }
+    return oss.str();
+  };
+
+  std::string name = "a" + format(alpha) + "_b" + format(beta);
+
+  return name;
+}
 
 template <class T>
 void save_vector(std::string filename, std::vector<T> &v) {

@@ -148,5 +148,8 @@ void test_aging(std::mt19937 &rng) {
 int main() {
   int seed = 1;
   std::mt19937 rng(seed);
-  test_aging(rng);
+  std::cout << param2name(1.0, 1.0) << std::endl;
+  std::cout << param2name(-1.0, 1.0) << std::endl;
+  std::cout << param2name(1.0, -1.0) << std::endl;
+  std::cout << param2name(-1.0, -1.0) << std::endl;
 }
