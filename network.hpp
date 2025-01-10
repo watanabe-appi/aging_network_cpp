@@ -79,7 +79,7 @@ public:
       weights.push_back(links * fitness);
     }
     WalkerAlias<int> alias_method(weights);
-    std::vector<int> indices = alias_method.select(m, rng);
+    std::vector<int> indices = alias_method.sample_unique(m, rng);
 
     const int j = size();
     add(rng);
@@ -107,6 +107,16 @@ public:
         }
       }
     }
+  }
+
+  void remove_aging(double alpha, std::mt19937 &rng) {
+    std::vector<double> weights;
+    for (auto &n : nodes) {
+      double links = static_cast<double>(n->degree());
+      weights.push_back(std::pow(links, alpha));
+    }
+    WalkerAlias<double> alias_method(weights);
+    int index = alias_method.sample_unique(1, rng)[0];
   }
 
   void remove_at(int index) {

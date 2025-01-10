@@ -10,12 +10,10 @@ template <typename T>
 class WalkerAlias {
 public:
   WalkerAlias(const std::vector<T> &weights) {
-    // エラー処理: 空のベクトルの場合
     if (weights.empty()) {
       throw std::invalid_argument("The input vector must not be empty.");
     }
 
-    // 重みの合計を計算
     T total_weight = std::accumulate(weights.begin(), weights.end(), static_cast<T>(0));
 
     // 正規化された確率を計算
@@ -25,7 +23,6 @@ public:
       probabilities[i] = static_cast<double>(weights[i]) / total_weight * n;
     }
 
-    // Small と Large のリストを作成
     std::vector<size_t> small;
     std::vector<size_t> large;
     for (size_t i = 0; i < n; ++i) {
@@ -36,7 +33,6 @@ public:
       }
     }
 
-    // Alias テーブルと Probability テーブルを構築
     alias.resize(n);
     probability.resize(n);
 
@@ -57,7 +53,6 @@ public:
       }
     }
 
-    // 残った要素を処理
     while (!small.empty()) {
       probability[small.back()] = 1.0;
       small.pop_back();
@@ -68,9 +63,48 @@ public:
     }
   }
 
-  std::vector<int> select(size_t m, std::mt19937 &rng) const {
-    // ランダムデバイス
+  /**
+   * Samples a single index based on the probability distribution.
+   *
+   * This method uses Walker's Alias Method to efficiently sample one index
+   * from a predefined probability distribution. The probability vector and
+   * alias table are precomputed, and this function uses a random number
+   * generator to select an index according to the probabilities.
+   *
+   * @param rng A reference to a random number generator (std::mt19937).
+   * @return The index of the sampled element based on the probability distribution.
+   * @throws std::invalid_argument If the probability vector is empty.
+   *
+   */
+  int sample(std::mt19937 &rng) const {
+    if (probability.empty()) {
+      throw std::invalid_argument("The probability vector is empty.");
+    }
 
+    std::uniform_int_distribution<size_t> dist_index(0, probability.size() - 1);
+    size_t index = dist_index(rng);
+
+    std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
+    int chosen = (dist_prob(rng) < probability[index]) ? index : alias[index];
+
+    return chosen;
+  }
+
+  /**
+   * Selects `m` unique indices based on a probability distribution.
+   *
+   * This method uses a probability vector and an alias table to perform efficient
+   * sampling of `m` unique indices. The indices are selected according to their
+   * probabilities, and the alias table is used to resolve cases where an index
+   * is not directly chosen. The result contains `m` unique indices, and the method
+   * ensures no duplicates in the selection.
+   *
+   * @param m The number of unique indices to select.
+   * @param rng A reference to a random number generator (std::mt19937).
+   * @return A vector of `m` unique indices.
+   * @throws std::invalid_argument If `m` is greater than the number of elements.
+   */
+  std::vector<int> sample_unique(size_t m, std::mt19937 &rng) const {
     if (m > probability.size()) {
       throw std::invalid_argument("m cannot be greater than the number of elements.");
     }
@@ -79,15 +113,12 @@ public:
     std::vector<int> result;
 
     while (result.size() < m) {
-      // インデックスをランダムに選択
       std::uniform_int_distribution<size_t> dist_index(0, probability.size() - 1);
       size_t index = dist_index(rng);
 
-      // 確率的にAliasを使用
       std::uniform_real_distribution<double> dist_prob(0.0, 1.0);
       int chosen = (dist_prob(rng) < probability[index]) ? index : alias[index];
 
-      // 重複しない場合のみ追加
       if (selected_indices.find(chosen) == selected_indices.end()) {
         selected_indices.insert(chosen);
         result.push_back(chosen);

@@ -18,9 +18,24 @@ void make_initial_network(int m, std::mt19937 &rng, Network &network) {
   }
 }
 
-void test_alias(std::mt19937 &rng) {
-  std::vector<double> weights = {1.0, 3.0, 2.0, 4.0};
+void test_alias_sample(std::mt19937 &rng) {
+  std::vector<double> weights = {1.0, 3.0, 2.5, 3.5};
+  WalkerAlias<double> alias_method(weights);
+  const int trials = 100000;
+  std::vector<int> counts(weights.size());
+  for (int i = 0; i < trials; ++i) {
+    int index = alias_method.sample(rng);
+    counts[index]++;
+  }
+  for (size_t i = 0; i < weights.size(); ++i) {
+    double ratio = static_cast<double>(counts[i]) / (trials);
+    std::cout << "Index " << i << ": " << counts[i] << " times ("
+              << (ratio * 100) << "%)\n";
+  }
+}
 
+void test_alias_sample_unique(std::mt19937 &rng) {
+  std::vector<double> weights = {1.0, 3.0, 2.0, 4.0};
   WalkerAlias<double> alias_method(weights);
 
   // 結果を統計的に確認
@@ -29,7 +44,7 @@ void test_alias(std::mt19937 &rng) {
   std::map<int, int> counts;
 
   for (int i = 0; i < trials; ++i) {
-    std::vector<int> indices = alias_method.select(m, rng);
+    std::vector<int> indices = alias_method.sample_unique(m, rng);
     for (int index : indices) {
       counts[index]++;
     }
@@ -90,5 +105,5 @@ void test_remove(std::mt19937 &rng) {
 int main() {
   int seed = 0;
   std::mt19937 rng(seed);
-  test_remove(rng);
+  test_alias_sample(rng);
 }
