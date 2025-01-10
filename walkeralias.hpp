@@ -16,7 +16,6 @@ public:
 
     T total_weight = std::accumulate(weights.begin(), weights.end(), static_cast<T>(0));
 
-    // 正規化された確率を計算
     size_t n = weights.size();
     std::vector<double> probabilities(n);
     for (size_t i = 0; i < n; ++i) {

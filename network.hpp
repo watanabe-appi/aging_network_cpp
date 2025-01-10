@@ -117,6 +117,9 @@ public:
     }
     WalkerAlias<double> alias_method(weights);
     int index = alias_method.sample_unique(1, rng)[0];
+    printf("Network removes %d\n", index);
+    remove_at(index);
+    remove_isolated_nodes();
   }
 
   void remove_at(int index) {

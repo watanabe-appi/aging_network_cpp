@@ -96,14 +96,13 @@ void test_remove(std::mt19937 &rng) {
   network.connect(1, 0);
   network.connect(2, 1);
   network.connect(3, 1);
+  const double alpha = 10;
   network.assign_id();
-  network.remove_at(1);
-  network.show_nodes();
-  network.show_edges();
+  network.remove_aging(alpha, rng);
 }
 
 int main() {
   int seed = 0;
   std::mt19937 rng(seed);
-  test_alias_sample(rng);
+  test_remove(rng);
 }
