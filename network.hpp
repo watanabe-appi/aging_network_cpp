@@ -16,12 +16,21 @@ public:
   Node(int _fitness)
       : id(0), fitness(_fitness) {
   }
+
+  ~Node() {
+    printf("Deleted: %d\n", id);
+  }
+
   void add(Node *n) {
     links.push_back(n);
   }
 
   int degree() {
     return static_cast<int>(links.size());
+  }
+
+  bool is_isolated() {
+    return degree() == 0;
   }
 
   void show() {
@@ -103,6 +112,7 @@ public:
     }
   }
 
+  // ノードの接続
   void connect(int i, int j) {
     assert(i < static_cast<int>(nodes.size()));
     assert(j < static_cast<int>(nodes.size()));
@@ -112,6 +122,19 @@ public:
     nj->add(ni);
     edges.push_back(Edge(ni, nj));
     // printf("connect %d-%d\n", i, j);
+  }
+
+  void remove_isolated_nodes() {
+    nodes.erase(
+        std::remove_if(nodes.begin(), nodes.end(),
+                       [](Node *node) {
+                         bool is_isolated = node->is_isolated();
+                         if (is_isolated) {
+                           delete node; // メモリ解放
+                         }
+                         return is_isolated;
+                       }),
+        nodes.end());
   }
 
   // 次数分布関数を返す

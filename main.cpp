@@ -60,15 +60,31 @@ std::vector<int> calc(int m, int N, std::mt19937 &rng) {
   return network.degree_distribution();
 }
 
-int main() {
-  int seed = 0;
+// BB modelの分布を確認するコード
+void test_BB(std::mt19937 &rng) {
   const int m = 4;
   const int N = 10000;
-  std::mt19937 rng(seed);
   std::vector<std::vector<int>> data;
   for (int i = 0; i < 10; i++) {
     data.push_back(calc(m, N, rng));
   }
   auto ave = average_frequency_distribution(data);
   show_all(ave);
+}
+
+void test_remove(std::mt19937 &rng) {
+  Network network;
+  network.add(rng);
+  network.add(rng);
+  network.add(rng);
+  network.connect(1, 2);
+  network.show_nodes();
+  network.remove_isolated_nodes();
+  network.show_nodes();
+}
+
+int main() {
+  int seed = 0;
+  std::mt19937 rng(seed);
+  test_remove(rng);
 }
