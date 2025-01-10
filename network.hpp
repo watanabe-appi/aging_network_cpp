@@ -170,6 +170,26 @@ public:
         nodes.end());
   }
 
+  double calculate_degree_average() {
+    double average = 0;
+    for (auto n : nodes) {
+      average += n->degree();
+    }
+    average /= nodes.size();
+    return average;
+  }
+
+  double calculate_degree_variance() {
+    double average = calculate_degree_average();
+    double variance = 0.0;
+    for (auto n : nodes) {
+      double diff = n->degree() - average;
+      variance += diff * diff;
+    }
+    variance /= nodes.size();
+    return variance;
+  }
+
   std::vector<int> degree_distribution() {
     std::vector<int> degrees;
     for (auto n : nodes) {

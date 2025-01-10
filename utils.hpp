@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <cstdio>
+#include <fstream>
 #include <vector>
 
 template <typename... Args>
@@ -12,6 +13,14 @@ void debug_printf(const char *format, Args const &...args) {
 void debug_printf(const char *, Args const &...) {
 }
 #endif
+
+template <class T>
+void save_vector(std::string filename, std::vector<T> &v) {
+  std::ofstream ofs(filename);
+  for (auto i : v) {
+    ofs << i << std::endl;
+  }
+}
 
 int find_max(std::vector<std::vector<int>> &v) {
   int max_value = 0;

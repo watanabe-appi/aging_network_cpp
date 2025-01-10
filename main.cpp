@@ -125,8 +125,9 @@ void test_add_aging(std::mt19937 &rng) {
 void test_aging(std::mt19937 &rng) {
   const int m = 4;
   const int N = 10000;
-  const double alpha = 1.0;
-  const double beta = 1.0;
+  const double alpha = -1.5;
+  const double beta = 2.0;
+  std::vector<double> degree_average, degree_variance;
   Network network;
   make_initial_network(m, rng, network);
   while (network.size() < N) {
@@ -134,9 +135,13 @@ void test_aging(std::mt19937 &rng) {
   }
   for (int i = 0; i < N; ++i) {
     network.aging_step(alpha, beta, m, N, rng);
+    degree_average.push_back(network.calculate_degree_average());
+    degree_variance.push_back(network.calculate_degree_variance());
   }
   auto v = network.degree_distribution();
   // network.show_nodes();
+  save_vector("degree.dat", degree_average);
+  save_vector("variance.dat", degree_variance);
   show_all(v);
 }
 
