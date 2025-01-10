@@ -6,19 +6,20 @@
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include <random>
 #include <vector>
 
 class Node {
 public:
   int id;
-  const int fitness;
+  int fitness;
   Node(int _fitness)
       : id(0), fitness(_fitness) {
   }
 
   ~Node() {
-    printf("Deleted: %d\n", id);
+    debug_printf("Deleted: %d\n", id);
   }
 
   void add(Node *n) {
@@ -28,7 +29,7 @@ public:
   void remove(Node *n) {
     auto it = std::remove(links.begin(), links.end(), n);
     if (it != links.end()) {
-      printf("Node %d removes %d\n", id, n->id);
+      debug_printf("Node %d removes %d\n", id, n->id);
       links.erase(it, links.end());
     }
   }
@@ -88,6 +89,30 @@ public:
     }
   }
 
+  // adds a node with adding parameter beta
+  void add_aging(double beta, int m, std::mt19937 &rng) {
+    std::vector<double> weights;
+    for (auto &n : nodes) {
+      double links = static_cast<double>(n->degree());
+      double fitness = static_cast<double>(n->fitness);
+      weights.push_back(std::pow(links * fitness, beta));
+    }
+    WalkerAlias<double> alias_method(weights);
+    std::vector<int> indices = alias_method.sample_unique(m, rng);
+    const int j = size();
+    add(rng);
+    for (auto i : indices) {
+      connect(i, j);
+    }
+  }
+
+  void aging_step(double alpha, double beta, int m, int N, std::mt19937 &rng) {
+    remove_aging(alpha, rng);
+    while (size() < N) {
+      add_aging(beta, m, rng);
+    }
+  }
+
   void connect(int i, int j) {
     assert(i < static_cast<int>(nodes.size()));
     assert(j < static_cast<int>(nodes.size()));
@@ -116,8 +141,8 @@ public:
       weights.push_back(std::pow(links, alpha));
     }
     WalkerAlias<double> alias_method(weights);
-    int index = alias_method.sample_unique(1, rng)[0];
-    printf("Network removes %d\n", index);
+    int index = alias_method.sample(rng);
+    debug_printf("Network removes %d\n", index);
     remove_at(index);
     remove_isolated_nodes();
   }

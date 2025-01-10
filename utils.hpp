@@ -3,6 +3,16 @@
 #include <cstdio>
 #include <vector>
 
+template <typename... Args>
+#ifdef DEBUG
+void debug_printf(const char *format, Args const &...args) {
+  printf(format, args...);
+}
+#else
+void debug_printf(const char *, Args const &...) {
+}
+#endif
+
 int find_max(std::vector<std::vector<int>> &v) {
   int max_value = 0;
   for (const auto &row : v) {

@@ -101,8 +101,47 @@ void test_remove(std::mt19937 &rng) {
   network.remove_aging(alpha, rng);
 }
 
+void test_add_aging(std::mt19937 &rng) {
+  Network network;
+  network.add(rng);
+  network.add(rng);
+  network.add(rng);
+  network.add(rng);
+  network.connect(0, 1);
+  network.connect(1, 2);
+  network.connect(2, 3);
+  const double beta = -2.0;
+  const int m = 4;
+  network.nodes[0]->fitness = 1;
+  network.nodes[1]->fitness = 1;
+  network.nodes[2]->fitness = 1;
+  network.nodes[3]->fitness = 1;
+  network.add_aging(beta, m, rng);
+  network.nodes[4]->fitness = 100;
+  network.add_aging(beta, m, rng);
+  network.show_nodes();
+}
+
+void test_aging(std::mt19937 &rng) {
+  const int m = 4;
+  const int N = 10000;
+  const double alpha = 1.0;
+  const double beta = 1.0;
+  Network network;
+  make_initial_network(m, rng, network);
+  while (network.size() < N) {
+    network.add_BB(m, rng);
+  }
+  for (int i = 0; i < N; ++i) {
+    network.aging_step(alpha, beta, m, N, rng);
+  }
+  auto v = network.degree_distribution();
+  // network.show_nodes();
+  show_all(v);
+}
+
 int main() {
-  int seed = 0;
+  int seed = 1;
   std::mt19937 rng(seed);
-  test_remove(rng);
+  test_aging(rng);
 }
