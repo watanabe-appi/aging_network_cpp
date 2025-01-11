@@ -51,7 +51,7 @@ void find_all(std::vector<int> &cluster) {
 }
 
 template <class T>
-void show_all(std::vector<T> &v) {
+void show_all(const std::vector<T> &v) {
   for (size_t i = 0; i < v.size(); ++i) {
     std::cout << i << " " << v[i] << std::endl;
   }
@@ -103,6 +103,18 @@ int find_max(std::vector<std::vector<int>> &v) {
     }
   }
   return max_value;
+}
+
+template <class T>
+std::vector<double> average_vector(std::vector<std::vector<T>> &v) {
+  std::vector<double> average(v[0].size());
+  double vinv = 1.0 / static_cast<double>(v.size());
+  for (auto &dd : v) {
+    for (int i = 0; i < static_cast<int>(dd.size()); i++) {
+      average[i] += dd[i] * vinv;
+    }
+  }
+  return average;
 }
 
 std::vector<double> average_frequency_distribution(std::vector<std::vector<int>> &v) {

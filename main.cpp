@@ -139,10 +139,13 @@ void test_aging(std::mt19937 &rng) {
 }
 
 void test_simulation(std::mt19937 &rng) {
+  simulate_sample(-1.5, -1.5, 100, rng);
+  /*
   simulate(-1.5, 2.0, rng);
   simulate(3.0, 2.5, rng);
   simulate(-1.5, -1.5, rng);
   simulate(2.0, -1.0, rng);
+*/
 }
 
 int pos2index(int x, int y, const int L) {
@@ -181,8 +184,21 @@ void test_percolation(std::mt19937 &rng) {
   }
 }
 
+void test_average() {
+  std::vector<std::vector<int>> v;
+  for (int i = 0; i < 10; i++) {
+    std::vector<int> d;
+    for (int j = 0; j < 10; j++) {
+      d.push_back(i + j);
+    }
+    v.push_back(d);
+  }
+  util::show_all(util::average_vector(v));
+}
+
 int main() {
   int seed = 0;
   std::mt19937 rng(seed);
+  //test_average();
   test_simulation(rng);
 }
