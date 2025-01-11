@@ -200,6 +200,35 @@ public:
     }
     nodes.erase(std::remove_if(nodes.begin(), nodes.end(), [](Node *n) { return n->remove_flag; }), nodes.end());
   }
+
+  // 現在のネットワークにおいて、与えられた確率pでエッジをactivateした時の最大クラスターの割合を返す。
+
+  double calculate_perocaltion_probability(const double p, std::mt19937 &rng) {
+    std::uniform_real_distribution<> ud(0.0, 1.0);
+    std::vector<int> cluster;
+    for (int i = 0; i < size(); ++i) {
+      cluster.push_back(i);
+    }
+    auto edges = generate_edge_list();
+    assign_id();
+    for (auto e : edges) {
+      int i = e.left->id;
+      int j = e.right->id;
+      if (ud(rng) < p) {
+        util::unite(i, j, cluster);
+      }
+    }
+    // Find the cluster index of the maximum cluster
+    std::vector<int> cluster_size(cluster.size());
+    for (auto i : cluster) {
+      cluster_size[i]++;
+    }
+    int index_of_max_cluster = util::find_max_index(cluster_size);
+    double probability = cluster_size[index_of_max_cluster];
+    probability /= size();
+    return probability;
+  }
+
   // for observation
   double calculate_degree_average() {
     double average = 0;

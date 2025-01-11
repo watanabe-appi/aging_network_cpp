@@ -138,20 +138,36 @@ void generate_variance(std::mt19937 &rng) {
   simulate(2.0, -1.0, rng);
 }
 
+int pos2index(int x, int y, const int L) {
+  x = (x + L) % L;
+  y = (y + L) % L;
+  return x + y * L;
+}
+
 void test_percolation(std::mt19937 &rng) {
+  const int L = 100;
   Network network;
-  network.add(rng);
-  network.add(rng);
-  network.add(rng);
-  network.add(rng);
-  network.add(rng);
-  network.connect(0, 2);
-  network.connect(1, 3);
-  network.connect(3, 4);
-  network.show_edges();
-  network.show_nodes();
-  network.filter_largest_cluster();
-  network.show_nodes();
+  for (int i = 0; i < L * L; ++i) {
+    network.add(rng);
+  }
+  for (int ix = 0; ix < L; ++ix) {
+    for (int iy = 0; iy < L; ++iy) {
+      int i = pos2index(ix, iy, L);
+      int j = pos2index(ix + 1, iy, L);
+      int k = pos2index(ix, iy + 1, L);
+      network.connect(i, j);
+      network.connect(i, k);
+    }
+  }
+  //network.show_edges();
+  //network.show_nodes();
+  //network.filter_largest_cluster();
+  //network.show_nodes();
+  //network.show_edges();
+  for (int i = 0; i < 10; ++i) {
+    double p = i * 0.1;
+    printf("%f %f\n", p, network.calculate_perocaltion_probability(p, rng));
+  }
 }
 
 int main() {
