@@ -64,7 +64,7 @@ seed = {seed}
 
 
 def sampling(alpha, beta, num):
-    N = 1000
+    N = 10000
     paramfiles = []
     for i in range(num):
         filename = save_param_sampling(N, alpha, beta, i)
@@ -75,7 +75,7 @@ def sampling(alpha, beta, num):
 
 
 def main():
-    sampling(1.5, 3.0, 10)
+    sampling(1.5, 3.0, 100)
 
 
 if __name__ == "__main__":
