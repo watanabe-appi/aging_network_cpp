@@ -12,10 +12,23 @@ percolation_sample = 100
     print(filename)
     with open(filename, "w") as f:
         f.write(param)
+    return filename
 
 
 def main():
-    save_param(10000, -2.2, 1.0)
+    N = 10000
+    params = []
+    params.append((-1.5, 2.0))
+    params.append((3.0, 2.5))
+    params.append((-1.5, -1.5))
+    params.append((2.0, -1.0))
+    paramfiles = []
+    for alpha, beta in params:
+        filename = save_param(N, alpha, beta)
+        paramfiles.append(filename)
+    with open("task.sh", "w") as f:
+        for filename in paramfiles:
+            f.write(f"./aging_simulation {filename}\n")
 
 
 if __name__ == "__main__":

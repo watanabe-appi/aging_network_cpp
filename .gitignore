@@ -6,3 +6,6 @@ a.out
 plot
 *.cfg
 data/*
+cps.log
+aging_simulation
+task.sh

@@ -1,4 +1,4 @@
-TARGET=a.out
+TARGET=aging_simulation
 all: $(TARGET)
 SRC=$(shell ls *.cpp)
 OBJ=$(SRC:.cpp=.o)
