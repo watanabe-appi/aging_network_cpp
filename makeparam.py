@@ -15,25 +15,6 @@ percolation_sample = 100
     return filename
 
 
-def save_param_sampling(N, alpha, beta, seed):
-    param = f"""
-system_size = {N}
-alpha = {alpha}
-beta = {beta}
-n_sample = 100
-percolation_sample = 100
-sampling = true
-data_dir = sampling
-"""
-    ia = int(alpha * 10)
-    ib = int(beta * 10)
-    filename = f"N{N:05d}_a{ia}_b{ib}.cfg"
-    print(filename)
-    with open(filename, "w") as f:
-        f.write(param)
-    return filename
-
-
 def distribution():
     N = 10000
     params = []
@@ -62,12 +43,39 @@ def distribution():
             f.write(f"./aging_simulation {filename}\n")
 
 
+def save_param_sampling(N, alpha, beta, seed):
+    param = f"""
+system_size = {N}
+alpha = {alpha}
+beta = {beta}
+n_sample = 1
+percolation_sample = 100
+sampling = true
+data_dir = sampling
+seed = {seed}
+"""
+    ia = int(alpha * 10)
+    ib = int(beta * 10)
+    filename = f"N{N:05d}_a{ia}_b{ib}_s{seed:02d}.cfg"
+    print(filename)
+    with open(filename, "w") as f:
+        f.write(param)
+    return filename
+
+
 def sampling(alpha, beta, num):
     N = 1000
+    paramfiles = []
+    for i in range(num):
+        filename = save_param_sampling(N, alpha, beta, i)
+        paramfiles.append(filename)
+    with open("task.sh", "w") as f:
+        for filename in paramfiles:
+            f.write(f"./aging_simulation {filename}\n")
 
 
 def main():
-    sampling(1.5, 3.0, 2)
+    sampling(1.5, 3.0, 10)
 
 
 if __name__ == "__main__":
