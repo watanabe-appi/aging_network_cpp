@@ -2,13 +2,14 @@
 #include <algorithm>
 #include <cstdio>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <vector>
 
 template <typename... Args>
 #ifdef DEBUG
-void debug_printf(const char *format, Args const &...args) {
+void debug_printf(const char *format, Args const &... args) {
   printf(format, args...);
 }
 #else
