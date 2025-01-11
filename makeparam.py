@@ -3,7 +3,7 @@ def save_param(N, alpha, beta):
 system_size = {N}
 alpha = {alpha}
 beta = {beta}
-n_sample = 1
+n_sample = 100
 percolation_sample = 100
 """
     ia = int(alpha * 10)
@@ -28,7 +28,7 @@ def main():
     params.append(( 1.5,  0.0))
     params.append(( 1.5,  1.0))
     params.append(( 1.5,  2.0))
-    params.append(( 1.5,  3.0))
+    #params.append(( 1.5,  3.0)) //これだけ遅いので
 
     params.append((-1.5, 2.0))
     params.append((3.0, 2.5))

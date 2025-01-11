@@ -19,7 +19,7 @@ $(TARGET): $(OBJ)
 .PHONY: clean dep
 
 dep:
-	g++ -MM *.cpp > Makefile.dep
+	g++ -MM -std=c++11 *.cpp > Makefile.dep
 
 clean:
 	rm -f $(TARGET) $(OBJ)
