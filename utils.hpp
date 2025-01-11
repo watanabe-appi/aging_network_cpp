@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <cassert>
 #include <cstdio>
 #include <fstream>
 #include <iomanip>
@@ -78,6 +79,16 @@ void save_vector(std::string filename, const std::vector<T> &v) {
   std::ofstream ofs(filename);
   for (auto i : v) {
     ofs << i << std::endl;
+  }
+  printf("%s\n", filename.c_str());
+}
+
+template <class T1, class T2>
+void save_vector(std::string filename, const std::vector<T1> &v1, const std::vector<T2> &v2) {
+  assert(v1.size() == v2.size());
+  std::ofstream ofs(filename);
+  for (size_t i = 0; i < v1.size(); ++i) {
+    ofs << v1[i] << " " << v2[i] << std::endl;
   }
   printf("%s\n", filename.c_str());
 }

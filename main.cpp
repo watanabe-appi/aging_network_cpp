@@ -139,11 +139,9 @@ void test_aging(std::mt19937 &rng) {
 }
 
 void test_simulation(std::mt19937 &rng) {
-  /*
   simulate(-1.5, 2.0, rng);
   simulate(3.0, 2.5, rng);
   simulate(-1.5, -1.5, rng);
-  */
   simulate(2.0, -1.0, rng);
 }
 

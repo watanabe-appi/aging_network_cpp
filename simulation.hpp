@@ -35,7 +35,13 @@ void simulate(const double alpha, const double beta, std::mt19937 &rng) {
     degree_variance.push_back(network.calculate_degree_variance());
   }
   const int nd = 100;
-  const int n_sample = 1;
+  double ninv = 1.0 / static_cast<double>(nd);
+  std::vector<double> probability;
+  for (int i = 0; i <= nd; ++i) {
+    probability.push_back(i * ninv);
+  }
+
+  const int n_sample = 100;
   auto percolation = network.calculate_percolation(nd, n_sample, rng);
 
   std::string base = util::param2name(alpha, beta);
@@ -46,5 +52,5 @@ void simulate(const double alpha, const double beta, std::mt19937 &rng) {
   util::save_vector(degree_average_file, degree_average);
   util::save_vector(degree_variance_file, degree_variance);
   util::save_vector(degree_distribution_file, network.degree_distribution());
-  util::save_vector(percolation_file, percolation);
+  util::save_vector(percolation_file, probability, percolation);
 }
