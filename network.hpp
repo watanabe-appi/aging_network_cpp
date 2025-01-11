@@ -219,6 +219,7 @@ public:
       }
     }
     // Find the cluster index of the maximum cluster
+    util::find_all(cluster);
     std::vector<int> cluster_size(cluster.size());
     for (auto i : cluster) {
       cluster_size[i]++;
@@ -230,9 +231,11 @@ public:
   }
 
   std::vector<double> calculate_percolation(const int nd, const int n_sample, std::mt19937 &rng) {
+    //最大クラスターノードのみ残す
+    filter_largest_cluster();
     std::vector<double> result;
     double ninv = 1.0 / static_cast<double>(nd);
-    for (int i = 0; i < nd; ++i) {
+    for (int i = 0; i <= nd; ++i) {
       double p = i * ninv;
       double probability = 0.0;
       for (int j = 0; j < n_sample; ++j) {

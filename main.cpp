@@ -122,19 +122,28 @@ void test_aging(std::mt19937 &rng) {
     degree_average.push_back(network.calculate_degree_average());
     degree_variance.push_back(network.calculate_degree_variance());
   }
+
+  const int nd = 10;
+  const int n_sample = 1;
+  auto percolation = network.calculate_percolation(nd, n_sample, rng);
+
   std::string base = util::param2name(alpha, beta);
   std::string degree_distribution_file = "degree_distribution_" + base + ".dat";
   std::string degree_average_file = "degree_average_" + base + ".dat";
   std::string degree_variance_file = "degree_variance_" + base + ".dat";
+  std::string percolation_file = "percolation_" + base + ".dat";
   util::save_vector(degree_average_file, degree_average);
   util::save_vector(degree_variance_file, degree_variance);
   util::save_vector(degree_distribution_file, network.degree_distribution());
+  util::save_vector(percolation_file, percolation);
 }
 
-void generate_variance(std::mt19937 &rng) {
+void test_simulation(std::mt19937 &rng) {
+  /*
   simulate(-1.5, 2.0, rng);
   simulate(3.0, 2.5, rng);
   simulate(-1.5, -1.5, rng);
+  */
   simulate(2.0, -1.0, rng);
 }
 
@@ -175,7 +184,7 @@ void test_percolation(std::mt19937 &rng) {
 }
 
 int main() {
-  int seed = 1;
+  int seed = 0;
   std::mt19937 rng(seed);
-  test_percolation(rng);
+  test_simulation(rng);
 }
