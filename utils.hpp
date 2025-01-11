@@ -62,21 +62,10 @@ void show_all(const std::vector<T> &v) {
 
 std::string param2name(const int N, double alpha, double beta) {
   char buf[100];
-  sprintf(buf, "N%05d", N);
-  std::string n_str = buf;
-  auto format = [](double value) -> std::string {
-    int intValue = static_cast<int>(value * 10);
-    std::ostringstream oss;
-    if (intValue >= 0) {
-      oss << std::setw(2) << std::setfill('0') << intValue;
-    } else {
-      oss << intValue;
-    }
-    return oss.str();
-  };
-
-  std::string name = n_str + "_a" + format(alpha) + "_b" + format(beta);
-
+  int ia = static_cast<int>(alpha * 10);
+  int ib = static_cast<int>(beta * 10);
+  sprintf(buf, "N%05d_a%02d_b%02d", N, ia, ib);
+  std::string name = buf;
   return name;
 }
 
