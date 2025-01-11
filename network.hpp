@@ -229,6 +229,21 @@ public:
     return probability;
   }
 
+  std::vector<double> calculate_percolation(const int nd, const int n_sample, std::mt19937 &rng) {
+    std::vector<double> result;
+    double ninv = 1.0 / static_cast<double>(nd);
+    for (int i = 0; i < nd; ++i) {
+      double p = i * ninv;
+      double probability = 0.0;
+      for (int j = 0; j < n_sample; ++j) {
+        probability += calculate_perocaltion_probability(p, rng);
+      }
+      probability /= n_sample;
+      result.push_back(probability);
+    }
+    return result;
+  }
+
   // for observation
   double calculate_degree_average() {
     double average = 0;

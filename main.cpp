@@ -164,9 +164,13 @@ void test_percolation(std::mt19937 &rng) {
   //network.filter_largest_cluster();
   //network.show_nodes();
   //network.show_edges();
-  for (int i = 0; i < 10; ++i) {
-    double p = i * 0.1;
-    printf("%f %f\n", p, network.calculate_perocaltion_probability(p, rng));
+  const int nd = 100;
+  const int n_sample = 1;
+  auto result = network.calculate_percolation(nd, n_sample, rng);
+  double ninv = 1.0 / static_cast<double>(nd);
+  for (int i = 0; i < nd; ++i) {
+    double p = i * ninv;
+    printf("%f %f\n", p, result[i]);
   }
 }
 
