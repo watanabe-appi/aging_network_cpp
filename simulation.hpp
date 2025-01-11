@@ -1,6 +1,7 @@
 #pragma once
 
 #include "network.hpp"
+#include "param/param.hpp"
 #include "walkeralias.hpp"
 #include <cstdio>
 #include <iostream>
@@ -25,9 +26,11 @@ void make_initial_network(int m, std::mt19937 &rng, Network &network) {
   }
 }
 
-void simulate(const double alpha, const double beta, Data &data, std::mt19937 &rng) {
+void simulate(param::parameter &param, Data &data, std::mt19937 &rng) {
+  const double alpha = param.get<double>("alpha");
+  const double beta = param.get<double>("beta");
   const int m = 4;
-  const int N = 100;
+  const int N = param.get<int>("system_size");
   std::vector<double> degree_average, degree_variance;
   Network network;
   make_initial_network(m, rng, network);
@@ -50,10 +53,11 @@ void simulate(const double alpha, const double beta, Data &data, std::mt19937 &r
   data.percolation.push_back(percolation);
 }
 
-void simulate_sample(const double alpha, const double beta, const int n_sample, std::mt19937 &rng) {
+void simulate_sample(param::parameter &param, std::mt19937 &rng) {
+  const int n_sample = param.get<int>("n_sample");
   Data data;
   for (int i = 0; i < n_sample; ++i) {
-    simulate(alpha, beta, data, rng);
+    simulate(param, data, rng);
   }
 
   const int nd = 100;
@@ -63,6 +67,8 @@ void simulate_sample(const double alpha, const double beta, const int n_sample, 
     probability.push_back(i * ninv);
   }
 
+  const double alpha = param.get<double>("alpha");
+  const double beta = param.get<double>("beta");
   std::string base = util::param2name(alpha, beta);
   std::string degree_distribution_file = "degree_distribution_" + base + ".dat";
   std::string degree_average_file = "degree_average_" + base + ".dat";

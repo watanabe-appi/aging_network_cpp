@@ -1,4 +1,7 @@
 #pragma once
+#ifndef UTIL
+#define UTIL
+
 #include <algorithm>
 #include <cassert>
 #include <cstdio>
@@ -143,3 +146,5 @@ std::vector<int> calculate_frequency_distribution(std::vector<int> &v) {
 }
 
 } // namespace util
+
+#endif

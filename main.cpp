@@ -1,6 +1,6 @@
-#include "network.hpp"
+//#include "network.hpp"
+#include "param/param.hpp"
 #include "simulation.hpp"
-#include "walkeralias.hpp"
 #include <algorithm>
 #include <cstdio>
 #include <iostream>
@@ -138,8 +138,7 @@ void test_aging(std::mt19937 &rng) {
   util::save_vector(percolation_file, percolation);
 }
 
-void test_simulation(std::mt19937 &rng) {
-  simulate_sample(-1.5, -1.5, 100, rng);
+void test_simulation() {
   /*
   simulate(-1.5, 2.0, rng);
   simulate(3.0, 2.5, rng);
@@ -191,8 +190,19 @@ void test_average() {
   util::show_all(util::average_vector(v));
 }
 
-int main() {
-  int seed = 0;
+int main(int argc, char **argv) {
+  if (argc < 2) {
+    printf("usage: ./aging_network parameterfile\n");
+    return -1;
+  }
+  std::string paramfile = argv[1];
+  param::parameter param(paramfile);
+  if (!param) {
+    std::cerr << "An error occurred while loading " << paramfile << std::endl;
+    return -1;
+  }
+  int seed = param.get<int>("seed", 0);
   std::mt19937 rng(seed);
-  test_simulation(rng);
+  simulate_sample(param, rng);
+  //test_simulation(rng);
 }
