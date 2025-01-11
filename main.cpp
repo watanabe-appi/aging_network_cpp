@@ -169,11 +169,6 @@ void test_percolation(std::mt19937 &rng) {
       network.connect(i, k);
     }
   }
-  //network.show_edges();
-  //network.show_nodes();
-  //network.filter_largest_cluster();
-  //network.show_nodes();
-  //network.show_edges();
   const int nd = 100;
   const int n_sample = 1;
   auto result = network.calculate_percolation(nd, n_sample, rng);
@@ -199,6 +194,5 @@ void test_average() {
 int main() {
   int seed = 0;
   std::mt19937 rng(seed);
-  //test_average();
   test_simulation(rng);
 }
