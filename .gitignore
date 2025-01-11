@@ -4,3 +4,5 @@ a.out
 *.dat
 .vscode
 plot
+*.cfg
+data/*
