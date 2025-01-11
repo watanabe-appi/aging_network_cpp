@@ -1,3 +1,6 @@
 [submodule "param"]
 	path = param
 	url = https://github.com/kaityo256/param.git
+[submodule "cps"]
+	path = cps
+	url = https://github.com/kaityo256/cps.git
