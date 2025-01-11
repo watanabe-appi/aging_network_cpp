@@ -73,12 +73,21 @@ void simulate_sample(param::parameter &param, std::mt19937 &rng) {
   const double alpha = param.get<double>("alpha");
   const double beta = param.get<double>("beta");
   const int N = param.get<int>("system_size");
+
+  std::string seed_str = "";
+  if (param.get<bool>("sampling", false)) {
+    char buf[100];
+    sprintf(buf, "_s%02d", param.get<int>("seed"));
+    seed_str = buf;
+  }
+
+  const std::string data_dir = param.get<std::string>("data_dir", "data/");
   std::string base = util::param2name(N, alpha, beta);
-  std::string degree_distribution_file = "data/degree_distribution_" + base + ".dat";
-  std::string fitness_average_file = "data/fitness_average_" + base + ".dat";
-  std::string degree_average_file = "data/degree_average_" + base + ".dat";
-  std::string degree_variance_file = "data/degree_variance_" + base + ".dat";
-  std::string percolation_file = "data/percolation_" + base + ".dat";
+  std::string degree_distribution_file = data_dir + "degree_distribution_" + base + seed_str + ".dat";
+  std::string fitness_average_file = data_dir + "fitness_average_" + base + seed_str + ".dat";
+  std::string degree_average_file = data_dir + "degree_average_" + base + seed_str + ".dat";
+  std::string degree_variance_file = data_dir + "degree_variance_" + base + seed_str + ".dat";
+  std::string percolation_file = data_dir + "percolation_" + base + seed_str + ".dat";
   util::save_vector(degree_distribution_file, util::average_frequency_distribution(data.degree_distribution));
   util::save_vector(fitness_average_file, util::average_vector(data.fitness_average));
   util::save_vector(degree_average_file, util::average_vector(data.degree_average));
