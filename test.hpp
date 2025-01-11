@@ -1,6 +1,9 @@
 #pragma once
 #include "network.hpp"
+#include <map>
+#include <numeric>
 #include <random>
+#include <unordered_set>
 
 void test_simulation() {
   /*
@@ -93,25 +96,4 @@ void test_alias_sample_unique(std::mt19937 &rng) {
     std::cout << "Index " << i << ": " << counts[i] << " times ("
               << (ratio * 100) << "%)\n";
   }
-}
-
-std::vector<int> calc(int m, int N, std::mt19937 &rng) {
-  Network network;
-  make_initial_network(m, rng, network);
-  while (network.size() < N) {
-    network.add_BB(m, rng);
-  }
-  return network.degree_distribution();
-}
-
-// BB modelの分布を確認するコード
-void test_BB(std::mt19937 &rng) {
-  const int m = 4;
-  const int N = 10000;
-  std::vector<std::vector<int>> data;
-  for (int i = 0; i < 10; i++) {
-    data.push_back(calc(m, N, rng));
-  }
-  auto ave = util::average_frequency_distribution(data);
-  util::show_all(ave);
 }

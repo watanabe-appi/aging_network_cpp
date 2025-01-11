@@ -5,10 +5,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <iostream>
-#include <map>
-#include <numeric>
 #include <random>
-#include <unordered_set>
 
 int main(int argc, char **argv) {
   if (argc < 2) {
@@ -24,5 +21,4 @@ int main(int argc, char **argv) {
   int seed = param.get<int>("seed", 0);
   std::mt19937 rng(seed);
   simulate_sample(param, rng);
-  //test_simulation(rng);
 }

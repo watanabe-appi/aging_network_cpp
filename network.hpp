@@ -268,6 +268,15 @@ public:
     return variance;
   }
 
+  double calculate_fitness_average() {
+    double average = 0;
+    for (auto n : nodes) {
+      average += n->fitness;
+    }
+    average /= nodes.size();
+    return average;
+  }
+
   std::vector<int> degree_distribution() {
     std::vector<int> degrees;
     for (auto n : nodes) {
