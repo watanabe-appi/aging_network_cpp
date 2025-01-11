@@ -38,14 +38,15 @@ void simulate(param::parameter &param, Data &data, std::mt19937 &rng) {
     network.add_BB(m, rng);
   }
 
-  for (int i = 0; i < N; ++i) {
+  const int aging_step = param.get<int>("aging_step", N);
+  for (int i = 0; i < aging_step; ++i) {
     network.aging_step(alpha, beta, m, N, rng);
     degree_average.push_back(network.calculate_degree_average());
     degree_variance.push_back(network.calculate_degree_variance());
   }
-  const int nd = 100;
-  const int n_sample = 100;
-  auto percolation = network.calculate_percolation(nd, n_sample, rng);
+  const int nd = param.get<int>("percolation_num_dividions", 100);
+  const int percolation_sample = param.get<int>("percolation_sample");
+  auto percolation = network.calculate_percolation(nd, percolation_sample, rng);
 
   data.degree_distribution.push_back(network.degree_distribution());
   data.degree_average.push_back(degree_average);
@@ -69,7 +70,8 @@ void simulate_sample(param::parameter &param, std::mt19937 &rng) {
 
   const double alpha = param.get<double>("alpha");
   const double beta = param.get<double>("beta");
-  std::string base = util::param2name(alpha, beta);
+  const int N = param.get<int>("system_size");
+  std::string base = util::param2name(N, alpha, beta);
   std::string degree_distribution_file = "degree_distribution_" + base + ".dat";
   std::string degree_average_file = "degree_average_" + base + ".dat";
   std::string degree_variance_file = "degree_variance_" + base + ".dat";

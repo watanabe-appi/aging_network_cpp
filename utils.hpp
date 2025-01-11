@@ -60,7 +60,10 @@ void show_all(const std::vector<T> &v) {
   }
 }
 
-std::string param2name(double alpha, double beta) {
+std::string param2name(const int N, double alpha, double beta) {
+  char buf[100];
+  sprintf(buf, "N%05d", N);
+  std::string n_str = buf;
   auto format = [](double value) -> std::string {
     int intValue = static_cast<int>(value * 10);
     std::ostringstream oss;
@@ -72,7 +75,7 @@ std::string param2name(double alpha, double beta) {
     return oss.str();
   };
 
-  std::string name = "a" + format(alpha) + "_b" + format(beta);
+  std::string name = n_str + "_a" + format(alpha) + "_b" + format(beta);
 
   return name;
 }
