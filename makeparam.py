@@ -18,6 +18,18 @@ percolation_sample = 100
 def main():
     N = 10000
     params = []
+    params.append((-1.0, 2.0))
+    params.append(( 0.0, 2.0))
+    params.append(( 1.0, 2.0))
+    params.append(( 2.0, 2.0))
+    params.append(( 3.0, 2.0))
+
+    params.append(( 1.5, -1.0))
+    params.append(( 1.5,  0.0))
+    params.append(( 1.5,  1.0))
+    params.append(( 1.5,  2.0))
+    params.append(( 1.5,  3.0))
+
     params.append((-1.5, 2.0))
     params.append((3.0, 2.5))
     params.append((-1.5, -1.5))
