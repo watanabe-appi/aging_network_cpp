@@ -78,7 +78,7 @@ void simulate_sample(param::parameter &param, std::mt19937 &rng) {
   std::string seed_str = "";
   if (param.get<bool>("sampling", false)) {
     char buf[100];
-    sprintf(buf, "_s%02d", param.get<int>("seed"));
+    snprintf(buf, sizeof(buf), "_s%02d", param.get<int>("seed"));
     seed_str = buf;
   }
 

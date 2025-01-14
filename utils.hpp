@@ -13,7 +13,7 @@
 
 template <typename... Args>
 #ifdef DEBUG
-void debug_printf(const char *format, Args const &... args) {
+void debug_printf(const char *format, Args const &...args) {
   printf(format, args...);
 }
 #else
@@ -64,7 +64,7 @@ std::string param2name(const int N, double alpha, double beta) {
   char buf[100];
   int ia = static_cast<int>(alpha * 10);
   int ib = static_cast<int>(beta * 10);
-  sprintf(buf, "N%05d_a%02d_b%02d", N, ia, ib);
+  snprintf(buf, sizeof(buf), "N%05d_a%02d_b%02d", N, ia, ib);
   std::string name = buf;
   return name;
 }

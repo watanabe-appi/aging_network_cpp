@@ -82,6 +82,14 @@ def finite_size():
     params.append((2500, 3.0, 2.5, 1))
     params.append((2500, -1.5, -1.5, 1))
     params.append((2500, 2.0, -1.0, 1))
+    params.append((5000, -1.5, 2.0, 1))
+    params.append((5000, 3.0, 2.5, 1))
+    params.append((5000, -1.5, -1.5, 1))
+    params.append((5000, 2.0, -1.0, 1))
+    params.append((7500, -1.5, 2.0, 1))
+    params.append((7500, 3.0, 2.5, 1))
+    params.append((7500, -1.5, -1.5, 1))
+    params.append((7500, 2.0, -1.0, 1))
     paramfiles = []
     for N, alpha, beta, n_sample in params:
         filename = save_param(N, alpha, beta, n_sample, "finite_size")
