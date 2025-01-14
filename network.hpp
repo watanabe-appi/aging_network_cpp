@@ -67,9 +67,16 @@ struct Edge {
 
 class Network {
 public:
+  Network(bool _use_BA_model = false) {
+    use_BA_model = _use_BA_model;
+  }
+
   void add(std::mt19937 &rng) {
     std::uniform_int_distribution<> ud(1, 100);
     int fitness = ud(rng);
+    if (use_BA_model) {
+      fitness = 1;
+    }
     nodes.push_back(new Node(fitness));
   }
 
@@ -231,7 +238,7 @@ public:
   }
 
   std::vector<double> calculate_percolation(const int nd, const int n_sample, std::mt19937 &rng) {
-    //最大クラスターノードのみ残す
+    // 最大クラスターノードのみ残す
     filter_largest_cluster();
     std::vector<double> result;
     double ninv = 1.0 / static_cast<double>(nd);
@@ -317,6 +324,9 @@ public:
     }
   }
 
+  // Properties
+
+  bool use_BA_model;
   std::vector<Node *> nodes;
 
 private:

@@ -32,8 +32,10 @@ void simulate(param::parameter &param, Data &data, std::mt19937 &rng) {
   const double beta = param.get<double>("beta");
   const int m = 4;
   const int N = param.get<int>("system_size");
+  const bool use_BA_model = param.get<bool>("use_BA_model", false);
+
   std::vector<double> fitness_average, degree_average, degree_variance;
-  Network network;
+  Network network(use_BA_model);
   make_initial_network(m, rng, network);
   while (network.size() < N) {
     network.add_BB(m, rng);
@@ -41,6 +43,7 @@ void simulate(param::parameter &param, Data &data, std::mt19937 &rng) {
 
   const int aging_step = param.get<int>("aging_step", N);
   for (int i = 0; i < aging_step; ++i) {
+    printf("%d\n", i);
     network.aging_step(alpha, beta, m, N, rng);
     fitness_average.push_back(network.calculate_fitness_average());
     degree_average.push_back(network.calculate_degree_average());

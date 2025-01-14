@@ -1,4 +1,4 @@
-def save_param(N, alpha, beta, n_sample, data_dir):
+def save_param(N, alpha, beta, n_sample, data_dir, use_BA_model):
     param = f"""
 system_size = {N}
 alpha = {alpha}
@@ -6,6 +6,7 @@ beta = {beta}
 n_sample = {n_sample}
 data_dir = {data_dir}
 percolation_sample = 100
+use_BA_model = {use_BA_model}
 """
     ia = int(alpha * 10)
     ib = int(beta * 10)
@@ -16,9 +17,9 @@ percolation_sample = 100
     return filename
 
 
-def distribution():
+def distribution(data_dir, use_BA_model):
     N = 10000
-    n_sample = 100
+    n_sample = 1
     params = []
     params.append((-1.0, 2.0))
     params.append((0.0, 2.0))
@@ -38,7 +39,7 @@ def distribution():
     params.append((2.0, -1.0))
     paramfiles = []
     for alpha, beta in params:
-        filename = save_param(N, alpha, beta, n_sample, "data")
+        filename = save_param(N, alpha, beta, n_sample, data_dir, use_BA_model)
         paramfiles.append(filename)
     with open("task.sh", "w") as f:
         for filename in paramfiles:
@@ -100,9 +101,35 @@ def finite_size():
             f.write(f"./aging_simulation {filename}\n")
 
 
+def BA_model():
+    N = 10000
+    n_sample = 1
+    params = []
+    data_dir = "BA_model"
+    use_BA_model = True
+    params.append((-1.0, 2.0))
+    params.append((0.0, 2.0))
+    params.append((1.0, 2.0))
+    params.append((2.0, 2.0))
+    params.append((3.0, 2.0))
+    params.append((1.5, -1.0))
+    params.append((1.5, 0.0))
+    params.append((1.5, 1.0))
+    params.append((1.5, 2.0))
+    # params.append((1.5, 3.0)) # これだけ遅いので別扱いとする。
+    paramfiles = []
+    for alpha, beta in params:
+        filename = save_param(N, alpha, beta, n_sample, data_dir, use_BA_model)
+        paramfiles.append(filename)
+    with open("task.sh", "w") as f:
+        for filename in paramfiles:
+            f.write(f"./aging_simulation {filename}\n")
+
+
 def main():
     # sampling(1.5, 3.0, 100)
-    finite_size()
+    # finite_size()
+    BA_model()
 
 
 if __name__ == "__main__":
