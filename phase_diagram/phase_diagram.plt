@@ -8,6 +8,7 @@ set yrange [-1.3:3.2]
 set xlabel "{/Symbol a}"
 set ylabel "{/Symbol b}"
 
-p "exp_finite.dat" pt 7 ps 1.5    lc "red"\
-, "power_zero.dat" pt 2 ps 1 lw 5 lc "blue"\
-, "power_finite.dat" pt 2 ps 1 lw 5 lc "red"
+p "exp_finite.dat"   pt 7 ps 1.5    lc "red"\
+, "exp_zero.dat"     pt 7 ps 1.5    lc "blue"\
+, "power_finite.dat" pt 2 ps 1 lw 5 lc "red" \
+, "power_zero.dat"   pt 2 ps 1 lw 5 lc "blue"\

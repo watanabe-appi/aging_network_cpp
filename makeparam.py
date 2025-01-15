@@ -128,8 +128,7 @@ def BA_model():
             f.write(f"./aging_simulation {filename}\n")
 
 
-def phase():
-    N = 1000
+def phase(N):
     n_sample = 1
     data_dir = "phase_diagram"
     use_BA_model = False
@@ -153,7 +152,7 @@ def main():
     # sampling(1.5, 3.0, 100)
     # finite_size()
     # BA_model()
-    phase()
+    phase(10000)
 
 
 if __name__ == "__main__":
