@@ -24,7 +24,6 @@ def distribution(data_dir, use_BA_model):
     params.append((-1.0, 2.0))
     params.append((0.0, 2.0))
     params.append((1.0, 2.0))
-    params.append((2.0, 2.0))
     params.append((3.0, 2.0))
 
     params.append((1.5, -1.0))
