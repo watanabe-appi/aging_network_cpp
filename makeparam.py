@@ -24,7 +24,6 @@ def distribution(data_dir, use_BA_model):
     params.append((-1.0, 2.0))
     params.append((0.0, 2.0))
     params.append((1.0, 2.0))
-    params.append((2.0, 2.0))
     params.append((3.0, 2.0))
 
     params.append((1.5, -1.0))
@@ -129,10 +128,32 @@ def BA_model():
             f.write(f"./aging_simulation {filename}\n")
 
 
+def phase():
+    N = 1000
+    n_sample = 1
+    data_dir = "phase_diagram"
+    use_BA_model = False
+    params = []
+    paramfiles = []
+    for a in range(10):
+        for b in range(10):
+            alpha = -1.5 + a * 0.5
+            beta = -1.5 + b * 0.5
+            params.append((alpha, beta))
+            print(f"{alpha} {beta}")
+    for alpha, beta in params:
+        filename = save_param(N, alpha, beta, n_sample, data_dir, use_BA_model)
+        paramfiles.append(filename)
+    with open("task.sh", "w") as f:
+        for filename in paramfiles:
+            f.write(f"./aging_simulation {filename}\n")
+
+
 def main():
-    sampling(1.5, 3.0, 100)
+    # sampling(1.5, 3.0, 100)
     # finite_size()
     # BA_model()
+    phase()
 
 
 if __name__ == "__main__":
