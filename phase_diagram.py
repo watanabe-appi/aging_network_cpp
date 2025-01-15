@@ -25,45 +25,12 @@ def calculate_p(filename):
     return data[20]
 
 
-def variance(N):
-    moment_dic = {}
-    for a in range(10):
-        for b in range(10):
-            alpha = -1.5 + a * 0.5
-            beta = -1.5 + b * 0.5
-            ia = int(alpha * 10)
-            ib = int(beta * 10)
-            filename = "degree_distribution_" + f"N{N:05d}_a{ia:02d}_b{ib:02d}.dat"
-            moment = calculate_moment(filename)
-            moment_dic[(alpha, beta)] = moment
-
-
-def moment(N):
-    moment_dic = {}
-    for a in range(10):
-        for b in range(10):
-            alpha = -1.5 + a * 0.5
-            beta = -1.5 + b * 0.5
-            ia = int(alpha * 10)
-            ib = int(beta * 10)
-            filename = "degree_distribution_" + f"N{N:05d}_a{ia:02d}_b{ib:02d}.dat"
-            moment = calculate_moment(filename)
-            moment_dic[(alpha, beta)] = moment
-    return moment_dic
-
-
-def percolation(N):
-    percolation_dic = {}
-    for a in range(10):
-        for b in range(10):
-            alpha = -1.5 + a * 0.5
-            beta = -1.5 + b * 0.5
-            ia = int(alpha * 10)
-            ib = int(beta * 10)
-            filename = "percolation_" + f"N{N:05d}_a{ia:02d}_b{ib:02d}.dat"
-            p_value = calculate_p(filename)
-            percolation_dic[(alpha, beta)] = p_value
-    return percolation_dic
+def last_variance(filename):
+    data = []
+    with open(filename) as f:
+        for line in f:
+            data.append(float(line))
+    return data[-1]
 
 
 def save_file(filename, data):
@@ -76,6 +43,7 @@ def save_file(filename, data):
 def load_all(N):
     moment_dic = {}
     percolation_dic = {}
+    variance_dic = {}
     for a in range(10):
         for b in range(10):
             alpha = -1.5 + a * 0.5
@@ -86,12 +54,13 @@ def load_all(N):
             basename = f"N{N:05d}_a{ia:02d}_b{ib:02d}.dat"
             percolation_dic[param] = calculate_p("percolation_" + basename)
             moment_dic[param] = calculate_moment("degree_distribution_" + basename)
-    return moment_dic, percolation_dic
+            variance_dic[param] = last_variance("degree_variance_" + basename)
+    return moment_dic, percolation_dic, variance_dic
 
 
 def make_phase_diagram():
     N = 1000
-    moment_dic, percolation_dic = load_all(N)
+    moment_dic, percolation_dic, variance_dic = load_all(N)
     exp_finite = []  # 分布が指数関数かつ相転移点有限
     exp_zero = []  # 分布が指数関数かつ相転移点がゼロ
     power_finite = []  # 分布がベキ関数かつ相転移点有限
@@ -101,6 +70,9 @@ def make_phase_diagram():
             alpha = -1.5 + a * 0.5
             beta = -1.5 + b * 0.5
             param = (alpha, beta)
+            # print(f"{param} {variance_dic[param]}")
+            if variance_dic[param] > 200:
+                continue
             if moment_dic[param] > 0.1:
                 if percolation_dic[param] > 0.2:
                     exp_zero.append(param)
