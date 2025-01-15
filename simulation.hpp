@@ -43,7 +43,6 @@ void simulate(param::parameter &param, Data &data, std::mt19937 &rng) {
 
   const int aging_step = param.get<int>("aging_step", N);
   for (int i = 0; i < aging_step; ++i) {
-    printf("%d\n", i);
     network.aging_step(alpha, beta, m, N, rng);
     fitness_average.push_back(network.calculate_fitness_average());
     degree_average.push_back(network.calculate_degree_average());

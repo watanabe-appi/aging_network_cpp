@@ -46,7 +46,7 @@ def distribution(data_dir, use_BA_model):
             f.write(f"./aging_simulation {filename}\n")
 
 
-def save_param_sampling(N, alpha, beta, seed):
+def save_param_sampling(N, alpha, beta, seed, data_dir, use_BA_model):
     param = f"""
 system_size = {N}
 alpha = {alpha}
@@ -54,8 +54,9 @@ beta = {beta}
 n_sample = 1
 percolation_sample = 100
 sampling = true
-data_dir = sampling
+data_dir = {data_dir}
 seed = {seed}
+use_BA_model = {use_BA_model}
 """
     ia = int(alpha * 10)
     ib = int(beta * 10)
@@ -68,9 +69,11 @@ seed = {seed}
 
 def sampling(alpha, beta, num):
     N = 10000
+    data_dir = "sampling_BA"
+    use_BA_model = True
     paramfiles = []
     for i in range(num):
-        filename = save_param_sampling(N, alpha, beta, i)
+        filename = save_param_sampling(N, alpha, beta, i, data_dir, use_BA_model)
         paramfiles.append(filename)
     with open("task.sh", "w") as f:
         for filename in paramfiles:
@@ -103,7 +106,7 @@ def finite_size():
 
 def BA_model():
     N = 10000
-    n_sample = 1
+    n_sample = 100
     params = []
     data_dir = "BA_model"
     use_BA_model = True
@@ -127,9 +130,9 @@ def BA_model():
 
 
 def main():
-    # sampling(1.5, 3.0, 100)
+    sampling(1.5, 3.0, 100)
     # finite_size()
-    BA_model()
+    # BA_model()
 
 
 if __name__ == "__main__":
