@@ -44,6 +44,7 @@ The meaning of each parameter is as follows
 | `percolation_sample` | 100     | Number of percolation samples |
 | `use_BA_model`       | False   | Whether to use the Barabási–Albert (BA) model |
 
+See [this paper](https://arxiv.org/abs/2412.20904) for the meaning of the parameters  and details of the calculations.
 
 Here is how to execute this program.
 
@@ -60,7 +61,6 @@ You will have the following results.
 
 Here is the Markdown table template for the given output files:
 
-```markdown
 | File Name                                         | Description |
 |--------------------------------------------------|-------------|
 | `data/degree_distribution_N10000_a00_b00.dat`   | Degree distribution data of the system |
@@ -69,6 +69,94 @@ Here is the Markdown table template for the given output files:
 | `data/degree_variance_N10000_a00_b00.dat`       | Time evolution of variance of the degree distribution |
 | `data/percolation_N10000_a00_b00.dat`           | Percolation data of the system |
 ```
+
+### Parameter parallel computation using CPS
+
+You can use [CPS](https://github.com/kaityo256/cps) to perform parameter parallel calculations.
+
+Build cps.
+
+```sh
+cd cps
+make
+cd ..
+``
+
+Prepare parameter files and a task list.
+
+```sh
+python3 makeparam.py
+```
+
+You will obtain the following parameter files.
+
+```txt
+N10000_a-10_b20.cfg
+N10000_a0_b20.cfg
+N10000_a10_b20.cfg
+N10000_a30_b20.cfg
+N10000_a15_b-10.cfg
+N10000_a15_b0.cfg
+N10000_a15_b10.cfg
+N10000_a15_b20.cfg
+N10000_a-15_b20.cfg
+N10000_a30_b25.cfg
+N10000_a-15_b-15.cfg
+N10000_a20_b-10.cfg
+```
+
+You also obtain a task list `task.sh`.
+
+```sh
+./aging_simulation N10000_a-10_b20.cfg
+./aging_simulation N10000_a0_b20.cfg
+./aging_simulation N10000_a10_b20.cfg
+./aging_simulation N10000_a30_b20.cfg
+./aging_simulation N10000_a15_b-10.cfg
+./aging_simulation N10000_a15_b0.cfg
+./aging_simulation N10000_a15_b10.cfg
+./aging_simulation N10000_a15_b20.cfg
+./aging_simulation N10000_a-15_b20.cfg
+./aging_simulation N10000_a30_b25.cfg
+./aging_simulation N10000_a-15_b-15.cfg
+./aging_simulation N10000_a20_b-10.cfg
+```
+
+Launch `cps` as follows.
+
+```sh
+mpirun --oversubscribe  -np 5 ./cps/cps task.sh 
+```
+
+In this example, cps is started in five processes, but one process is used for management, so it is executed in four processes in parallel.
+
+After the calculation is completed, refer to `cps.log` for the calculation time. Here is an example of output.
+
+```txt
+Number of tasks : 12
+Number of processes : 5
+Total execution time: 957.304 [s]
+Elapsed time: 303.608 [s]
+Parallel Efficiency : 0.788273
+
+Task list:
+Command : Elapsed time
+./aging_simulation N10000_a-10_b20.cfg : 65.265 [s]
+./aging_simulation N10000_a0_b20.cfg : 49.161 [s]
+./aging_simulation N10000_a10_b20.cfg : 143.255 [s]
+./aging_simulation N10000_a30_b20.cfg : 69.48 [s]
+./aging_simulation N10000_a15_b-10.cfg : 59.816 [s]
+./aging_simulation N10000_a15_b0.cfg : 54.664 [s]
+./aging_simulation N10000_a15_b10.cfg : 61.644 [s]
+./aging_simulation N10000_a15_b20.cfg : 92.111 [s]
+./aging_simulation N10000_a-15_b20.cfg : 67.39 [s]
+./aging_simulation N10000_a30_b25.cfg : 172.475 [s]
+./aging_simulation N10000_a-15_b-15.cfg : 70.132 [s]
+./aging_simulation N10000_a20_b-10.cfg : 51.911 [s]
+```
+
+The log shows that 12 tasks were executed in parallel by 5 processes (actually 4 processes because of the management process), with an overall computation time of 957 seconds and an actual wall time of 304 seconds.
+
 
 ## License
 
