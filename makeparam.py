@@ -30,7 +30,7 @@ def distribution(data_dir, use_BA_model):
     params.append((1.5, 0.0))
     params.append((1.5, 1.0))
     params.append((1.5, 2.0))
-    # params.append(( 1.5,  3.0)) //これだけ遅いので
+    # params.append(( 1.5,  3.0)) //Too slow
 
     params.append((-1.5, 2.0))
     params.append((3.0, 2.5))
@@ -118,7 +118,7 @@ def BA_model():
     params.append((1.5, 0.0))
     params.append((1.5, 1.0))
     params.append((1.5, 2.0))
-    # params.append((1.5, 3.0)) # これだけ遅いので別扱いとする。
+    # params.append((1.5, 3.0)) # Too slow
     paramfiles = []
     for alpha, beta in params:
         filename = save_param(N, alpha, beta, n_sample, data_dir, use_BA_model)
@@ -152,7 +152,8 @@ def main():
     # sampling(1.5, 3.0, 100)
     # finite_size()
     # BA_model()
-    phase(10000)
+    # phase(10000)
+    distribution("data", False)
 
 
 if __name__ == "__main__":
