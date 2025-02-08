@@ -59,8 +59,6 @@ data/percolation_N10000_a00_b00.dat
 
 You will have the following results.
 
-Here is the Markdown table template for the given output files:
-
 | File Name                                         | Description |
 |--------------------------------------------------|-------------|
 | `data/degree_distribution_N10000_a00_b00.dat`   | Degree distribution data of the system |
