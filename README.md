@@ -66,7 +66,6 @@ You will have the following results.
 | `data/degree_average_N10000_a00_b00.dat`        | Time evolution of average of the degree distribution|
 | `data/degree_variance_N10000_a00_b00.dat`       | Time evolution of variance of the degree distribution |
 | `data/percolation_N10000_a00_b00.dat`           | Percolation data of the system |
-```
 
 ### Parameter parallel computation using CPS
 
