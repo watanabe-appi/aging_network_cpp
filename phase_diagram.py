@@ -59,7 +59,7 @@ def load_all(N):
 
 
 def make_phase_diagram():
-    N = 1000
+    N = 10000
     moment_dic, percolation_dic, variance_dic = load_all(N)
     exp_finite = []  # 分布が指数関数かつ相転移点有限
     exp_zero = []  # 分布が指数関数かつ相転移点がゼロ
@@ -74,12 +74,12 @@ def make_phase_diagram():
             if variance_dic[param] > 200:
                 continue
             if moment_dic[param] > 0.1:
-                if percolation_dic[param] > 0.2:
+                if percolation_dic[param] > 0.1:
                     exp_zero.append(param)
                 else:
                     exp_finite.append(param)
             else:
-                if percolation_dic[param] > 0.2:
+                if percolation_dic[param] > 0.1:
                     power_zero.append(param)
                 else:
                     power_finite.append(param)
