@@ -24,13 +24,14 @@ def distribution(data_dir, use_BA_model):
     params.append((-1.0, 2.0))
     params.append((0.0, 2.0))
     params.append((1.0, 2.0))
+    params.append((2.0, 2.0))
     params.append((3.0, 2.0))
 
     params.append((1.5, -1.0))
     params.append((1.5, 0.0))
     params.append((1.5, 1.0))
     params.append((1.5, 2.0))
-    # params.append(( 1.5,  3.0)) //Too slow
+    params.append(( 1.5,  3.0)) # Too slow
 
     params.append((-1.5, 2.0))
     params.append((3.0, 2.5))
@@ -79,9 +80,34 @@ def sampling(alpha, beta, num):
             f.write(f"./aging_simulation {filename}\n")
 
 
+def time_evolutions():
+    N = 10000
+    n_sample = 100
+    data_dir = "data"
+    use_BA_model = False
+    params = []
+    params.append((-1.5, 2.0))
+    params.append((3.0, 2.5))
+    params.append((-1.5, -1.5))
+    params.append((2.0, -1.0))
+    paramfiles = []
+    for alpha, beta in params:
+        filename = save_param(N, alpha, beta, n_sample, data_dir, use_BA_model)
+        paramfiles.append(filename)
+    with open("task.sh", "w") as f:
+        for filename in paramfiles:
+            f.write(f"./aging_simulation {filename}\n")
+
+
 def finite_size():
     params = []
     n_sample = 100
+    data_dir = "finite_size"
+    use_BA_model = False
+    params.append((10000, -1.5, 2.0, n_sample))
+    params.append((10000, 3.0, 2.5, n_sample))
+    params.append((10000, -1.5, -1.5, n_sample))
+    params.append((10000, 2.0, -1.0, n_sample))
     params.append((7500, -1.5, 2.0, n_sample))
     params.append((7500, 3.0, 2.5, n_sample))
     params.append((7500, -1.5, -1.5, n_sample))
@@ -96,7 +122,7 @@ def finite_size():
     params.append((2500, 2.0, -1.0, n_sample))
     paramfiles = []
     for N, alpha, beta, n_sample in params:
-        filename = save_param(N, alpha, beta, n_sample, "finite_size")
+        filename = save_param(N, alpha, beta, n_sample, data_dir, use_BA_model)
         paramfiles.append(filename)
     with open("task.sh", "w") as f:
         for filename in paramfiles:
@@ -150,10 +176,11 @@ def phase(N):
 
 def main():
     # sampling(1.5, 3.0, 100)
-    # finite_size()
+    finite_size()
     # BA_model()
     # phase(10000)
-    distribution("data", False)
+    # distribution("data", False)
+    # time_evolutions()
 
 
 if __name__ == "__main__":
