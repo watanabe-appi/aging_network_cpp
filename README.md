@@ -4,7 +4,9 @@
 
 This is the code to obtain the results of the following paper.
 
-Ryuho Sekikawa, Hiroshi Watanabe, "Structural Changes and Percolation Transition in Networks after Aging Processes", [arXiv:2412.20904](https://arxiv.org/abs/2412.20904).
+* R. Sekikawa and H. Watanabe, "Structural Changes and Percolation Transition in Networks after Aging Processes", J. Phys. Soc. Jpn. **94**, 044004 (2025).
+* [https://doi.org/10.7566/JPSJ.94.044004](https://doi.org/10.7566/JPSJ.94.044004)
+* [arXiv:2412.20904](https://arxiv.org/abs/2412.20904)
 
 The initial network is constructed using the Bianconi-Barabási model, and the network is examined for changes over time by repeatedly deleting and adding nodes. We introduced two tunable parameters, the deleting parameter $\alpha$ and the adding parameter $\beta$, and observed the aging behavior for the various parameter sets.
 
@@ -77,7 +79,7 @@ Build cps.
 cd cps
 make
 cd ..
-``
+```
 
 Prepare parameter files and a task list.
 
@@ -158,3 +160,8 @@ The log shows that 12 tasks were executed in parallel by 5 processes (actually 4
 ## License
 
 MIT
+
+We appreciate your citing the following reference when you publish the results using our code.
+
+* R. Sekikawa and H. Watanabe, "Structural Changes and Percolation Transition in Networks after Aging Processes", J. Phys. Soc. Jpn. **94**, 044004 (2025).
+* [https://doi.org/10.7566/JPSJ.94.044004](https://doi.org/10.7566/JPSJ.94.044004)
