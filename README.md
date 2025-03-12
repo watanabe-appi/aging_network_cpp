@@ -10,6 +10,10 @@ This is the code to obtain the results of the following paper.
 
 The initial network is constructed using the Bianconi-Barabási model, and the network is examined for changes over time by repeatedly deleting and adding nodes. We introduced two tunable parameters, the deleting parameter $\alpha$ and the adding parameter $\beta$, and observed the aging behavior for the various parameter sets.
 
+The data obtained by executing this code is available in the following repository.
+
+[https://isspns-gitlab.issp.u-tokyo.ac.jp/kaityo256/aging_network_data](https://isspns-gitlab.issp.u-tokyo.ac.jp/kaityo256/aging_network_data)
+
 ## How to use
 
 ### How to build
